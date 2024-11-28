@@ -170,6 +170,7 @@ func Trim(snaps []*Snapshot) (results []*Snapshot) {
 		m.mu.Unlock()
 		if len(m.Detail) == 0 {
 			snaps = append(snaps[:i], snaps[i+1:]...)
+			i--
 		}
 	}
 	results = snaps

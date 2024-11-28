@@ -156,6 +156,23 @@ func TestSnaps(t *testing.T) {
 	}
 }
 
+func TestTrim(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		mask := 1 << i
+		var snaps []*Snapshot
+		vs := New()
+		for j := 0; j < 2048; j++ {
+			v := j & mask
+			vs.Set("count", v)
+			snaps = append(snaps, vs.Snap())
+		}
+		shrink := Trim(snaps)
+		if got, want := len(shrink), len(snaps)/mask+1; got != len(snaps) && got != want {
+			t.Errorf("[%d,%b] got=%d want=%d", i, mask, len(shrink), len(snaps))
+		}
+	}
+}
+
 func TestRate(t *testing.T) {
 	samples := []struct {
 		dt time.Duration
